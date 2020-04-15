@@ -1,0 +1,51 @@
+canvas {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+h3 {
+    margin: 10px;
+}
+
+h1 {
+    margin: 0px;
+}
+
+input[type=number] {
+    width: 40px;
+}
+
+.column {
+    float: left;
+}
+
+.left{
+    width: 25%;
+    height: 100%;
+}
+
+.right {
+      width: 25%;
+      height: 700px;
+    vertical-align: middle;
+  }
+
+.right img {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+.middle {
+    width: 50%;
+}
+
+.rule-row-text {
+    font-size: medium;
+}
+
+.info-window-text {
+    line-height: 700px;
+    opacity: 0;
+    text-align: center;
+}
