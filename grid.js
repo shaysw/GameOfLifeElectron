@@ -27,15 +27,6 @@ class Grid {
         }
     }
 
-    createRandomGrid() {
-        for (var row = 0; row < this.height; row++) {
-            for (var column = 0; column < this.width; column++) {
-                var randomNumber = Math.random();
-                this.grid[row][column] = randomNumber < this.threshold ? true : false;
-            }
-        }
-    }
-
     static iterate(g) {
         var newGrid = new Grid(
             false,
@@ -48,7 +39,6 @@ class Grid {
             g.deadSlotMaxLiveNeighboursToBringToLife);
 
 
-
         for (var row = 0; row < newGrid.height; row++) {
             for (var column = 0; column < newGrid.width; column++) {
                 newGrid.grid[row][column] = g.iterateCell(row, column);
@@ -57,13 +47,21 @@ class Grid {
         return newGrid;
     }
 
+    createRandomGrid() {
+        for (var row = 0; row < this.height; row++) {
+            for (var column = 0; column < this.width; column++) {
+                var randomNumber = Math.random();
+                this.grid[row][column] = randomNumber < this.threshold ? true : false;
+            }
+        }
+    }
+
     getNeighbour(row, column) {
 
         var neighbourValue;
         try {
             neighbourValue = this.grid[row][column];
-        }
-        catch {
+        } catch {
             neighbourValue = false;
         }
 

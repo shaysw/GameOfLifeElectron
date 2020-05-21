@@ -9,7 +9,15 @@ const tileW = 35, tileH = 35;
 const mapW = 20, mapH = 20;
 let settings = {};
 let stopLoop = false;
-var g;
+let g;
+
+const height = 20;
+const width = 20;
+const threshold = 0.33;
+const liveSlotMinLiveNeighboursToKeepAlive = 2;
+const liveSlotMaxLiveNeighboursToKeepAlive = 3;
+const deadSlotMinLiveNeighboursToBringToLife = 3;
+const deadSlotMaxLiveNeighboursToBringToLife = 3;
 
 window.onload = function () {
     ctx = document.getElementById('game').getContext("2d");
@@ -38,42 +46,32 @@ function setInfoWindowTextValue(text) {
 }
 
 function start() {
-    var height = 20;
-    var width = 20;
-    var threshold = 0.33;
-    var liveSlotMinLiveNeighboursToKeepAlive = 2;
-    var liveSlotMaxLiveNeighboursToKeepAlive = 3;
-    var deadSlotMinLiveNeighboursToBringToLife = 3;
-    var deadSlotMaxLiveNeighboursToBringToLife = 3;
+    initializeNewGame();
+    getSettingsFromForm();
 
     g = new Grid(
         true,
         height,
         width,
-        threshold,
-        liveSlotMinLiveNeighboursToKeepAlive,
-        liveSlotMaxLiveNeighboursToKeepAlive,
-        deadSlotMinLiveNeighboursToBringToLife,
-        deadSlotMaxLiveNeighboursToBringToLife);
+        settings['threshold'],
+        settings['liveSlotMinLiveNeighboursToKeepAlive'],
+        settings['liveSlotMaxLiveNeighboursToKeepAlive'],
+        settings['deadSlotMinLiveNeighboursToBringToLife'],
+        settings['deadSlotMaxLiveNeighboursToBringToLife']);
 
-    initializeNewGame();
-    getSettingsFromForm();
     startLoop();
-
-    return;
 
     function initializeNewGame() {
         setInfoWindowTextOpacity(0);
         setInfoWindowTextValue("");
-        isGameFinished = false;
         stopLoop = false;
         let pauseButton = document.getElementById("pauseButton");
         pauseButton.value = "Pause";
     }
 
     function getSettingsFromForm() {
-        let threshold = Number(document.getElementById("threshold").value);
-        if (threshold == null || threshold < 0 || threshold > 100) {
+        let threshold = Number(document.getElementById("threshold").value) / 100;
+        if (threshold == null || threshold < 0 || threshold > 1) {
             alert("Must be between 0-100");
             return;
         }
@@ -134,7 +132,6 @@ function drawGame(g) {
 }
 
 
-
 function nextStep() {
     if (!stopLoop) {
         pause();
@@ -152,7 +149,7 @@ function startLoop() {
             if (JSON.stringify(g.grid) === JSON.stringify(newGrid.grid)) {
                 setInfoWindowTextOpacity(1);
                 setInfoWindowTextValue("Game Finished");
-                return;
+
             } else {
                 g = newGrid;
                 startLoop();
